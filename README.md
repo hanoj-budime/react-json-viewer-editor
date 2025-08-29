@@ -5,50 +5,44 @@
 [![Tests](https://img.shields.io/github/actions/workflow/status/hanoj-budime/react-json-viewer-editor/test.yml?label=tests)]()
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)]()
 
-A **modern, fast, and accessible JSON Viewer & Editor** built with **React, TypeScript, Vite, and Tailwind CSS**.
+A **modern, fast, and accessible JSON Viewer & Editor** built with **React, TypeScript, Vite, and Tailwind CSS**.  
 Easily **load, view, validate, search, edit, and export JSON** with support for **large files (10–20MB)**, a polished UI, and full keyboard navigation.
 
-<!-- 👉 Try it live: [Demo Page](#) *(add link once deployed)* -->
+👉 **Live Demo:** [React JSON Viewer & Editor](https://hanoj-budime.github.io/react-json-viewer-editor/)
+
 ---
 
 ## ✨ Features
 
 * **Load JSON**
-
   * Paste, drag & drop `.json`, or fetch via URL
   * Real-time validation with precise error messages
 
 * **Tree Viewer**
-
   * Collapsible tree with lazy rendering
   * Expand/collapse all or to a specific depth
   * Type badges, key counts, array lengths, and value previews
 
 * **Search & Filter**
-
   * Global search with match count and next/prev navigation
   * Filter by key, value, or type
 
 * **Editing**
-
   * Inline editing for keys/values with validation
   * Add/remove nodes, reorder array items
   * Pretty-print / Minify toggle
 
 * **Utilities**
-
   * Copy value, key, or JSONPath
   * Download JSON, copy full JSON
   * Recent files / tabs to manage multiple docs
 
 * **UX & Theming**
-
   * Dark/light mode (system default)
   * Responsive layout, sticky toolbar
   * Keyboard shortcuts + Help modal
 
 * **Performance**
-
   * Virtualized rendering for large payloads
   * Parsing & validation off main thread (Web Worker)
   * Debounced expensive operations
@@ -66,7 +60,7 @@ Easily **load, view, validate, search, edit, and export JSON** with support for 
 
 ```bash
 # Clone repo
-git clone https://github.com/your-username/react-json-viewer-editor.git
+git clone https://github.com/hanoj-budime/react-json-viewer-editor.git
 cd react-json-viewer-editor
 
 # Install deps
@@ -77,7 +71,7 @@ pnpm dev
 
 # Run tests
 pnpm test
-```
+````
 
 ### Build for Production
 

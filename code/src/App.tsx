@@ -9,9 +9,7 @@ export default function App() {
     if (typeof window !== "undefined") {
       const stored = localStorage.getItem("theme") as "light" | "dark" | null;
       if (stored) return stored;
-      return window.matchMedia("(prefers-color-scheme: dark)").matches
-        ? "dark"
-        : "light";
+      return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
     }
     return "light";
   };
@@ -45,15 +43,21 @@ export default function App() {
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100">
       <div className="container mx-auto p-4">
-        <header className="flex items-center justify-between mb-4">
-          <h1 className="text-2xl font-semibold">Modern JSON Viewer</h1>
-          <div className="flex gap-2 items-center">
-            <SearchBar data={data} />
+        <header className="flex flex-col md:flex-row md:items-center md:justify-between mb-6 gap-3">
+          {/* Left: Title */}
+          <h1 className="text-2xl font-semibold tracking-tight">Modern JSON Viewer</h1>
+
+          {/* Right: Search + Theme Toggle */}
+          <div className="flex items-center gap-3 w-full md:w-auto">
+            <div className="flex-1 md:flex-none">
+              <SearchBar data={data} />
+            </div>
             <button
-              className="px-3 py-1 rounded border bg-gray-200 dark:bg-gray-800 hover:bg-gray-300 dark:hover:bg-gray-700"
+              className="p-2 rounded-full border bg-gray-200 dark:bg-gray-800 hover:bg-gray-300 dark:hover:bg-gray-700 transition"
               onClick={() => setTheme((t) => (t === "dark" ? "light" : "dark"))}
+              aria-label="Toggle theme"
             >
-              {theme === "dark" ? "🌙 Dark" : "☀️ Light"}
+              {theme === "dark" ? "🌙" : "☀️"}
             </button>
           </div>
         </header>

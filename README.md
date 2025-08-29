@@ -1,138 +1,173 @@
-# React JSON Viewer & Editor
+# Modern JSON Viewer & Editor
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
-[![Build](https://img.shields.io/github/actions/workflow/status/your-username/react-json-viewer-editor/ci.yml)]()
-[![Tests](https://img.shields.io/github/actions/workflow/status/your-username/react-json-viewer-editor/test.yml?label=tests)]()
-[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)]()
+> Fast, accessible JSON Viewer & Editor — React + TypeScript + Vite + Tailwind
 
-A **modern, fast, and accessible JSON Viewer & Editor** built with **React, TypeScript, Vite, and Tailwind CSS**.
-Easily **load, view, validate, search, edit, and export JSON** with support for **large files (10–20MB)**, a polished UI, and full keyboard navigation.
-
-👉 Try it live: [Demo Page](#) *(add link once deployed)*
+**Live demo / repo:** https://github.com/hanoj-budime/modern-json-viewer *(replace with your repo URL if different)*
 
 ---
 
-## ✨ Features
+## What’s included (latest)
 
-* **Load JSON**
+This project is a production-focused JSON viewer/editor with features and UX improvements added incrementally. Recent changes included:
 
-  * Paste, drag & drop `.json`, or fetch via URL
-  * Real-time validation with precise error messages
-
-* **Tree Viewer**
-
-  * Collapsible tree with lazy rendering
-  * Expand/collapse all or to a specific depth
-  * Type badges, key counts, array lengths, and value previews
-
-* **Search & Filter**
-
-  * Global search with match count and next/prev navigation
-  * Filter by key, value, or type
-
-* **Editing**
-
-  * Inline editing for keys/values with validation
-  * Add/remove nodes, reorder array items
-  * Pretty-print / Minify toggle
-
-* **Utilities**
-
-  * Copy value, key, or JSONPath
-  * Download JSON, copy full JSON
-  * Recent files / tabs to manage multiple docs
-
-* **UX & Theming**
-
-  * Dark/light mode (system default)
-  * Responsive layout, sticky toolbar
-  * Keyboard shortcuts + Help modal
-
-* **Performance**
-
-  * Virtualized rendering for large payloads
-  * Parsing & validation off main thread (Web Worker)
-  * Debounced expensive operations
+- **Modern single-line SearchBar** with advanced search options (key / value / type), regex, case-sensitivity, Next/Prev navigation, and match-preview panel.
+- **Sticky header** containing the SearchBar and theme toggle (light/dark) with `backdrop-blur` effect.
+- **Sticky toolbar** below the header for core actions (Pretty / Minify / Download).
+- **Fixed footer** at the bottom with personal branding (Hanoj Budime) and a GitHub link; layout adjusted so content never overlaps the footer.
+- **TreeViewer & TreeNode**: recursive tree view with
+  - Syntax highlighting (colors for keys, strings, numbers, booleans, null),
+  - Type badges (object/array/string/etc.),
+  - Lazy expansion, but children render when collapsed to support global Expand All / Expand to Path operations,
+  - Expand All / Collapse All via context signals.
+- **Search → jump-to** integration: selecting a search result expands ancestors, highlights the node, and scrolls it into view.
+- **Web Worker parsing** with a synchronous fallback for test/SSR environments.
+- **Vitest** configuration fixes so `.tsx` files are correctly transformed in tests (avoid `Unexpected token (1:0)`).
+- **Improved dev & test scripts** and additional unit tests for core utilities and components.
 
 ---
 
-## 🚀 Getting Started
+## Quick start (dev)
 
-### Prerequisites
-
-* [Node.js](https://nodejs.org/) (>= 18)
-* [pnpm](https://pnpm.io/) or npm/yarn
-
-### Install & Run Locally
+Requirements: Node 18+ (or compatible), npm / pnpm / yarn.
 
 ```bash
-# Clone repo
-git clone https://github.com/your-username/react-json-viewer-editor.git
-cd react-json-viewer-editor
+# clone
+git clone https://github.com/hanoj-budime/modern-json-viewer.git
+cd modern-json-viewer
 
-# Install deps
-pnpm install
+# install
+npm install
+# or pnpm install
 
-# Start dev server
-pnpm dev
+# run dev server
+npm run dev
 
-# Run tests
-pnpm test
-```
+# build
+npm run build
 
-### Build for Production
+# preview production build
+npm run preview
 
-```bash
-pnpm build
-pnpm preview
-```
-
-The build output will be in `dist/`, ready to deploy to any static host (Netlify, Vercel, GitHub Pages, etc.).
-
----
-
-## 🧪 Testing
-
-* **Unit tests** with [Vitest](https://vitest.dev/) + [@testing-library/react](https://testing-library.com/docs/react-testing-library/intro/)
-* **End-to-end tests** for load → view → search → edit → export
-
-```bash
-pnpm test
+# run tests
+npm run test
 ```
 
 ---
 
-## 📦 Tech Stack
+## Project structure (key files)
 
-* **Framework:** React + TypeScript
-* **Bundler:** Vite
-* **Styling:** Tailwind CSS
-* **State/Data:** React Query + lightweight state
-* **Testing:** Vitest + React Testing Library
-* **Accessibility:** WCAG 2.1 AA compliance
+```
+src/
+├─ main.tsx
+├─ App.tsx                # header, search, toolbar, layout, footer
+├─ styles/index.css
+├─ components/
+│  ├─ Editor.tsx
+│  ├─ SearchBar.tsx       # single-line modern search bar
+│  ├─ Toolbar.tsx
+│  ├─ TreeViewer.tsx
+│  ├─ TreeNode.tsx        # colored node rendering, expand/collapse, selected highlight
+│  └─ HelpModal.tsx
+├─ hooks/
+│  └─ useParserWorker.ts  # Web Worker parse with fallback
+├─ workers/
+│  └─ parser.worker.ts
+├─ utils/
+│  └─ jsonUtils.ts
+└─ types.d.ts
+
+public/
+├─ demo-data/
+│  ├─ small.json
+│  ├─ medium.json
+│  └─ large.json
+
+tests/
+├─ parser.spec.ts
+├─ treeviewer.spec.tsx
+└─ utils.spec.ts
+```
 
 ---
 
-## 📜 License
+## Features & UX
 
-This project is licensed under the [MIT License](LICENSE).
-
----
-
-## 🤝 Contributing
-
-Contributions, issues, and feature requests are welcome!
-
-* Fork the repo
-* Create a new branch (`feature/my-feature`)
-* Commit changes
-* Submit a PR
-
-Check out the [issues](../../issues) for things to work on.
+- Paste, upload `.json`, or fetch from URL (with CORS guidance)
+- Real-time validation with human-friendly errors
+- Tree viewer with color-coded keys & values
+- Expand / Collapse all and Expand-to-path
+- Search (advanced options) + jump-to + highlight
+- Inline editing scaffolding (quick to enable: Editor/TreeNode)
+- Pretty / Minify, Download `.json`, Copy clipboard utilities
+- Dark/light theme toggle (persisted to `localStorage` and applied to `<html>` for correct Tailwind `dark:` classes)
+- Performance: parsing off-main-thread, memoized nodes, virtualization-ready (react-window included)
 
 ---
 
-## 🌟 Acknowledgements
+## Tests
 
-Inspired by [jsonviewer.stack.hu](http://jsonviewer.stack.hu) and other JSON tools.
-Special thanks to the open-source community ❤️
+This project uses **Vitest** + **@testing-library/react**. The Vite `test` configuration ensures `.tsx` is transformed correctly in test runs.
+
+Run tests:
+```bash
+npm run test
+```
+
+Add tests in `tests/` for components or utilities as needed. Existing tests cover parser utilities and TreeViewer rendering.
+
+---
+
+## SEO-friendly hosting (recommendation)
+
+**Recommended quick deploy:** Cloudflare Pages (free forever, global CDN)
+
+### Steps (Cloudflare Pages)
+1. Push the repo to GitHub.
+2. Create a Cloudflare Pages project and connect the repo.
+3. Build settings:
+   - Build command: `npm run build`
+   - Build output directory: `dist`
+4. Add `/_redirects` file for SPA fallback if using client-side routing:
+   ```
+   /* /index.html 200
+   ```
+5. Add `public/robots.txt` and `public/sitemap.xml` (or generate sitemap after build).
+6. Add social preview image `public/og-image.png` (1200×630) and meta tags in `index.html`.
+
+**Alternative free hosts:** Netlify, GitHub Pages (use gh-pages), or Vercel (free tier; better if you migrate to Next.js for SSR).
+
+---
+
+## SEO checklist (do this before deploy)
+
+- Add meta title & description in `index.html` or server-side head.
+- Add Open Graph and Twitter card meta tags.
+- Provide `sitemap.xml` and `robots.txt`.
+- Provide `og-image.png` at `public/`.
+- Submit sitemap to Google Search Console and Bing Webmaster Tools.
+
+---
+
+## Deployment tips (CI)
+
+Example GitHub Actions (auto-deploy to Cloudflare Pages) — use Cloudflare Pages native Git integration or GitHub Action to upload the `dist/` folder.
+
+---
+
+## Troubleshooting & common fixes
+
+- **Vitest parses `.tsx` as JS**: Ensure `vite.config.ts` includes a `test` block with `transformMode.web` and that `@vitejs/plugin-react` is enabled. Also include `tests` in `tsconfig.json` `include`.
+- **Worker fails in tests/SSR**: `useParserWorker` includes a runtime guard and synchronous fallback if `Worker` is not available.
+- **Tailwind dark mode not applying**: Ensure `darkMode: 'class'` in `tailwind.config.cjs` and that the `dark` class is toggled on the `<html>` element (this project applies it in `App.tsx`).
+
+---
+
+## License
+
+This repository uses the **MIT License** by default. Replace with **Apache-2.0** if you prefer patent protection.
+
+---
+
+## About / Contact
+
+Built by **Hanoj Budime** — Frontend Engineer. GitHub: https://github.com/hanoj-budime

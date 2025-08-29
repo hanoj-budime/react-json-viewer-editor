@@ -1,5 +1,4 @@
-// src/components/SearchBar.tsx
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState, useRef } from "react";
 
 type JsonValue = any;
 
@@ -30,6 +29,7 @@ export default function SearchBar({ data, onSelectPath }: Props) {
   const [matches, setMatches] = useState<MatchEntry[]>([]);
   const [selectedIndex, setSelectedIndex] = useState<number>(-1);
   const [debounceMs] = useState(250);
+  const containerRef = useRef<HTMLDivElement | null>(null);
 
   // simple recursive walker
   function walk(obj: any, path = "$", collect: MatchEntry[] = []) {
@@ -38,7 +38,6 @@ export default function SearchBar({ data, onSelectPath }: Props) {
     if (Array.isArray(obj)) {
       obj.forEach((v, i) => {
         const p = `${path}[${i}]`;
-        // check entry itself (as index key)
         checkMatch(undefined, v, p, collect);
         walk(v, p, collect);
       });
@@ -70,8 +69,8 @@ export default function SearchBar({ data, onSelectPath }: Props) {
       } else {
         const q = caseSensitive ? query : query.toLowerCase();
         if (scope === "key") matched = k ? (caseSensitive ? k.includes(q) : k.toLowerCase().includes(q)) : false;
-        else if (scope === "value") matched = (caseSensitive ? valueStr.includes(q) : valueStr.toLowerCase().includes(q));
-        else matched = (caseSensitive ? t === q : t.toLowerCase() === q.toLowerCase());
+        else if (scope === "value") matched = caseSensitive ? valueStr.includes(q) : valueStr.toLowerCase().includes(q);
+        else matched = caseSensitive ? t === q : t.toLowerCase() === q.toLowerCase();
       }
 
       if (matched) {
@@ -119,7 +118,7 @@ export default function SearchBar({ data, onSelectPath }: Props) {
       alive = false;
       clearTimeout(id);
     };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [query, scope, useRegex, caseSensitive, data]);
 
   const matchCount = matches.length;
@@ -140,17 +139,55 @@ export default function SearchBar({ data, onSelectPath }: Props) {
   // results preview (first 8)
   const previewItems = useMemo(() => matches.slice(0, 8), [matches]);
 
+  function clear() {
+    setQuery("");
+    setMatches([]);
+    setSelectedIndex(-1);
+    onSelectPath?.("");
+  }
+
   return (
-    <div className="w-full md:w-96">
-      <div className="flex items-center gap-2">
+    <div ref={containerRef} className="w-full md:w-96">
+      <div className="relative flex items-center gap-2">
+        {/* Search icon */}
+        <div className="absolute left-3 pointer-events-none">
+          <svg className="w-4 h-4 text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M21 21l-4.35-4.35M10.5 18a7.5 7.5 0 1 1 0-15 7.5 7.5 0 0 1 0 15z"
+            />
+          </svg>
+        </div>
+
         <input
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           placeholder="Search JSON (key / value / type)..."
-          className="w-full px-3 py-2 rounded-lg border bg-white dark:bg-gray-800 text-sm font-medium focus:ring-2 focus:ring-indigo-200 dark:focus:ring-indigo-500"
+          className="w-full pl-10 pr-32 py-3 rounded-lg border bg-white dark:bg-gray-800 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-indigo-200 dark:focus:ring-indigo-500 transition"
           aria-label="Search JSON"
         />
-        <div className="flex items-center space-x-2">
+
+        {/* Clear button */}
+        {query && (
+          <button
+            onClick={clear}
+            className="absolute right-28 p-1.5 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700"
+          >
+            <svg
+              className="w-4 h-4 text-gray-600 dark:text-gray-300"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+            >
+              <path strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        )}
+
+        {/* Controls container */}
+        <div className="absolute right-2 flex items-center gap-2">
           <select
             value={scope}
             onChange={(e) => setScope(e.target.value as any)}
@@ -161,6 +198,7 @@ export default function SearchBar({ data, onSelectPath }: Props) {
             <option value="value">Value</option>
             <option value="type">Type</option>
           </select>
+
           <button
             title="Regex"
             onClick={() => setUseRegex((s) => !s)}
@@ -171,7 +209,9 @@ export default function SearchBar({ data, onSelectPath }: Props) {
           <button
             title="Case Sensitive"
             onClick={() => setCaseSensitive((s) => !s)}
-            className={`px-2 py-1 rounded ${caseSensitive ? "bg-indigo-600 text-white" : "bg-gray-50 dark:bg-gray-700"}`}
+            className={`px-2 py-1 rounded ${
+              caseSensitive ? "bg-indigo-600 text-white" : "bg-gray-50 dark:bg-gray-700"
+            }`}
           >
             Aa
           </button>
@@ -179,10 +219,16 @@ export default function SearchBar({ data, onSelectPath }: Props) {
       </div>
 
       <div className="mt-2 flex items-center justify-between text-xs text-gray-600">
-        <div>{matchCount} match{matchCount !== 1 ? "es" : ""}</div>
+        <div>
+          {matchCount} match{matchCount !== 1 ? "es" : ""}
+        </div>
         <div className="flex items-center gap-2">
-          <button onClick={goPrev} className="px-2 py-1 rounded border bg-white dark:bg-gray-800">Prev</button>
-          <button onClick={goNext} className="px-2 py-1 rounded border bg-white dark:bg-gray-800">Next</button>
+          <button onClick={goPrev} className="px-2 py-1 rounded border bg-white dark:bg-gray-800">
+            Prev
+          </button>
+          <button onClick={goNext} className="px-2 py-1 rounded border bg-white dark:bg-gray-800">
+            Next
+          </button>
         </div>
       </div>
 
@@ -191,8 +237,13 @@ export default function SearchBar({ data, onSelectPath }: Props) {
           {previewItems.map((m, i) => (
             <div
               key={m.path}
-              onClick={() => { setSelectedIndex(i); onSelectPath?.(m.path); }}
-              className={`p-1 rounded cursor-pointer ${selectedIndex === i ? "bg-indigo-100 dark:bg-indigo-800" : "hover:bg-gray-100 dark:hover:bg-gray-700"}`}
+              onClick={() => {
+                setSelectedIndex(i);
+                onSelectPath?.(m.path);
+              }}
+              className={`p-1 rounded cursor-pointer ${
+                selectedIndex === i ? "bg-indigo-100 dark:bg-indigo-800" : "hover:bg-gray-100 dark:hover:bg-gray-700"
+              }`}
             >
               <div className="font-mono text-xs text-gray-500">{m.path}</div>
               <div className="flex gap-2 items-center">

@@ -16,6 +16,7 @@ export default function App() {
 
   const [raw, setRaw] = useState<string>("");
   const [data, setData] = useState<any>(null);
+  const [highlightPath, setHighlightPath] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [theme, setTheme] = useState<"light" | "dark">(getInitialTheme);
 
@@ -40,18 +41,23 @@ export default function App() {
     setError(err);
   }, []);
 
+  // onSelectPath will receive path from SearchBar
+  function handleSelectPath(path: string) {
+    setHighlightPath(path);
+  }
+
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100">
       <div className="container mx-auto p-4">
         <header className="flex flex-col md:flex-row md:items-center md:justify-between mb-6 gap-3">
           {/* Left: Title */}
           <h1 className="text-2xl font-semibold tracking-tight">Modern JSON Viewer</h1>
-
           {/* Right: Search + Theme Toggle */}
           <div className="flex items-center gap-3 w-full md:w-auto">
             <div className="flex-1 md:flex-none">
-              <SearchBar data={data} />
+              <SearchBar data={data} onSelectPath={handleSelectPath} />
             </div>
+            {/* theme toggle button (keep your implementation) */}
             <button
               className="p-2 rounded-full border bg-gray-200 dark:bg-gray-800 hover:bg-gray-300 dark:hover:bg-gray-700 transition"
               onClick={() => setTheme((t) => (t === "dark" ? "light" : "dark"))}
@@ -69,7 +75,7 @@ export default function App() {
             <Editor raw={raw} setRaw={setRaw} onParse={onParse} onError={onError} />
           </section>
           <section className="md:col-span-2">
-            <TreeViewer data={data} error={error} />
+            <TreeViewer data={data} error={error} highlightPath={highlightPath} />
           </section>
         </main>
       </div>

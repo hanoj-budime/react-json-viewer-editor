@@ -16,9 +16,9 @@ export default function App() {
 
   const [raw, setRaw] = useState<string>("");
   const [data, setData] = useState<any>(null);
-  const [highlightPath, setHighlightPath] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [theme, setTheme] = useState<"light" | "dark">(getInitialTheme);
+  const [highlightPath, setHighlightPath] = useState<string | null>(null);
 
   // apply theme to <html> and persist
   useEffect(() => {
@@ -41,44 +41,77 @@ export default function App() {
     setError(err);
   }, []);
 
-  // onSelectPath will receive path from SearchBar
   function handleSelectPath(path: string) {
-    setHighlightPath(path);
+    setHighlightPath(path || null);
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100">
-      <div className="container mx-auto p-4">
-        <header className="flex flex-col md:flex-row md:items-center md:justify-between mb-6 gap-3">
-          {/* Left: Title */}
-          <h1 className="text-2xl font-semibold tracking-tight">Modern JSON Viewer</h1>
-          {/* Right: Search + Theme Toggle */}
-          <div className="flex items-center gap-3 w-full md:w-auto">
-            <div className="flex-1 md:flex-none">
-              <SearchBar data={data} onSelectPath={handleSelectPath} />
-            </div>
-            {/* theme toggle button (keep your implementation) */}
+    <div className="min-h-screen flex flex-col bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100">
+      {/* Sticky header */}
+      <header className="sticky top-0 z-40 bg-white/60 dark:bg-gray-900/60 backdrop-blur-sm border-b border-gray-200 dark:border-gray-800">
+        <div className="container mx-auto px-4 py-3 flex items-center gap-4">
+          <h1 className="text-lg md:text-2xl font-semibold tracking-tight flex-shrink-0">Modern JSON Viewer</h1>
+
+          <div className="flex-1">
+            {/* single-line modern SearchBar */}
+            <SearchBar data={data} onSelectPath={handleSelectPath} />
+          </div>
+
+          <div className="ml-4 flex items-center gap-2">
             <button
-              className="p-2 rounded-full border bg-gray-200 dark:bg-gray-800 hover:bg-gray-300 dark:hover:bg-gray-700 transition"
+              className="p-2 rounded-full border bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition"
               onClick={() => setTheme((t) => (t === "dark" ? "light" : "dark"))}
               aria-label="Toggle theme"
             >
               {theme === "dark" ? "🌙" : "☀️"}
             </button>
           </div>
-        </header>
+        </div>
+      </header>
 
-        <Toolbar raw={raw} setRaw={setRaw} setData={setData} setError={setError} />
+      {/* Toolbar (sticky under header) */}
+      <div className="sticky top-[72px] z-30 bg-white/50 dark:bg-gray-900/50 backdrop-blur-sm border-b border-gray-100 dark:border-gray-800">
+        <div className="container mx-auto px-4 py-2">
+          <Toolbar raw={raw} setRaw={setRaw} setData={setData} setError={setError} />
+        </div>
+      </div>
 
-        <main className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+      <main className="container mx-auto p-4 pt-6 pb-36 flex-grow">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <section className="md:col-span-1">
             <Editor raw={raw} setRaw={setRaw} onParse={onParse} onError={onError} />
           </section>
           <section className="md:col-span-2">
             <TreeViewer data={data} error={error} highlightPath={highlightPath} />
           </section>
-        </main>
-      </div>
+        </div>
+      </main>
+
+      {/* Fixed footer at bottom */}
+      <footer className="fixed bottom-0 left-0 right-0 z-50 border-t border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900">
+        <div className="container mx-auto px-4 py-4 flex flex-col md:flex-row items-center justify-between gap-3">
+          <div className="flex items-center gap-3">
+            <div className="h-10 w-10 rounded-full bg-gradient-to-br from-indigo-500 to-purple-500 flex items-center justify-center text-white font-bold">
+              HB
+            </div>
+            <div>
+              <div className="text-sm font-semibold">Hanoj Budime</div>
+              <div className="text-xs text-gray-600 dark:text-gray-400">Frontend Engineer — JSON tools & utilities</div>
+            </div>
+          </div>
+
+          <div className="text-sm">
+            <a
+              href="https://github.com/hanoj-budime"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="px-3 py-2 rounded-lg border bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 transition"
+            >
+              View on GitHub
+            </a>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }

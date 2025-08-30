@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState, useRef } from "react";
-import { Combobox } from "@headlessui/react";
+import { Combobox, ComboboxButton, ComboboxOptions, ComboboxOption } from "@headlessui/react";
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
 
 type JsonValue = any;
@@ -141,50 +141,52 @@ export default function SearchBar({ data, onSelectPath }: Props) {
   const previewItems = useMemo(() => matches.slice(0, 6), [matches]);
 
   return (
-    <div className="w-full">
-      {/* Single-line modern search bar */}
-      <div className="flex items-center gap-3 w-full bg-white dark:bg-gray-800 border rounded-lg px-3 py-2 shadow-sm">
-        {/* Search icon */}
-        <div className="flex-shrink-0 text-gray-400">
-          <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-            <path
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M21 21l-4.35-4.35M10.5 18a7.5 7.5 0 1 1 0-15 7.5 7.5 0 0 1 0 15z"
-            />
-          </svg>
+    <div className="w-full max-w-full">
+      <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3 w-full bg-white dark:bg-gray-800 border rounded-lg px-3 py-2 shadow-sm">
+        {/* Search input row (always full width on mobile) */}
+        <div className="flex items-center gap-2 flex-1">
+          {/* Search icon */}
+          <div className="flex-shrink-0 text-gray-400">
+            <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <path
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M21 21l-4.35-4.35M10.5 18a7.5 7.5 0 1 1 0-15 7.5 7.5 0 0 1 0 15z"
+              />
+            </svg>
+          </div>
+
+          {/* Input */}
+          <input
+            ref={inputRef}
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder="Search JSON..."
+            className="flex-1 bg-transparent outline-none text-sm font-medium text-gray-900 dark:text-gray-100"
+            aria-label="Search JSON"
+          />
         </div>
 
-        {/* Input */}
-        <input
-          ref={inputRef}
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          placeholder="Search JSON (key / value / type)..."
-          className="flex-1 bg-transparent outline-none text-sm font-medium text-gray-900 dark:text-gray-100"
-          aria-label="Search JSON"
-        />
-
-        {/* Inline controls */}
-        <div className="flex items-center gap-2">
+        {/* Controls — wrap on small screens */}
+        <div className="flex flex-wrap items-center gap-2">
           {/* Scope Combobox */}
           <Combobox value={scope} onChange={(val: "key" | "value" | "type") => setScope(val)}>
-            <div className="relative w-28">
-              <Combobox.Button className="relative w-full cursor-pointer rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 py-2 pl-3 pr-10 text-left text-sm font-medium text-gray-900 dark:text-gray-100 shadow-sm hover:border-indigo-400 dark:hover:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400">
+            <div className="relative w-24 sm:w-28">
+              <ComboboxButton className="relative w-full cursor-pointer rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 py-1.5 pl-2 pr-8 text-left text-sm font-medium text-gray-900 dark:text-gray-100 shadow-sm hover:border-indigo-400 dark:hover:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400">
                 <span className="block truncate capitalize">{scope}</span>
                 <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
-                  <ChevronUpDownIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
+                  <ChevronUpDownIcon className="h-4 w-4 text-gray-400" aria-hidden="true" />
                 </span>
-              </Combobox.Button>
+              </ComboboxButton>
 
-              <Combobox.Options className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 py-1 text-sm shadow-lg ring-1 ring-black/5 focus:outline-none">
+              <ComboboxOptions className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 py-1 text-sm shadow-lg ring-1 ring-black/5 focus:outline-none">
                 {["key", "value", "type"].map((opt) => (
-                  <Combobox.Option
+                  <ComboboxOption
                     key={opt}
                     value={opt}
                     className={({ active }) =>
-                      `relative cursor-pointer select-none py-2 pl-8 pr-4 ${
+                      `relative cursor-pointer select-none py-1.5 pl-7 pr-3 ${
                         active ? "bg-indigo-600 text-white" : "text-gray-900 dark:text-gray-100"
                       }`
                     }
@@ -198,22 +200,23 @@ export default function SearchBar({ data, onSelectPath }: Props) {
                               active ? "text-white" : "text-indigo-600"
                             }`}
                           >
-                            <CheckIcon className="h-5 w-5" aria-hidden="true" />
+                            <CheckIcon className="h-4 w-4" aria-hidden="true" />
                           </span>
                         ) : null}
                       </>
                     )}
-                  </Combobox.Option>
+                  </ComboboxOption>
                 ))}
-              </Combobox.Options>
+              </ComboboxOptions>
             </div>
           </Combobox>
 
+          {/* Toggle buttons */}
           <button
             title="Regex"
             onClick={() => setUseRegex((s) => !s)}
-            className={`px-2 py-1 rounded ${
-              useRegex ? "bg-indigo-600 text-white" : "bg-gray-50 dark:bg-gray-700 text-sm"
+            className={`px-2 py-1 rounded text-sm ${
+              useRegex ? "bg-indigo-600 text-white" : "bg-gray-50 dark:bg-gray-700"
             }`}
           >
             RE
@@ -222,17 +225,19 @@ export default function SearchBar({ data, onSelectPath }: Props) {
           <button
             title="Case Sensitive"
             onClick={() => setCaseSensitive((s) => !s)}
-            className={`px-2 py-1 rounded ${
-              caseSensitive ? "bg-indigo-600 text-white" : "bg-gray-50 dark:bg-gray-700 text-sm"
+            className={`px-2 py-1 rounded text-sm ${
+              caseSensitive ? "bg-indigo-600 text-white" : "bg-gray-50 dark:bg-gray-700"
             }`}
           >
             Aa
           </button>
 
-          <div className="text-xs text-gray-500 px-2">
+          {/* Match count */}
+          <div className="text-xs text-gray-500 px-1 sm:px-2 whitespace-nowrap">
             {matchCount} {matchCount === 1 ? "match" : "matches"}
           </div>
 
+          {/* Navigation */}
           <div className="flex items-center border-l pl-2">
             <button onClick={goPrev} className="px-2 py-1 rounded hover:bg-gray-100 dark:hover:bg-gray-700">
               ◀
@@ -242,8 +247,9 @@ export default function SearchBar({ data, onSelectPath }: Props) {
             </button>
           </div>
 
+          {/* Clear */}
           {query ? (
-            <button onClick={clear} className="ml-2 p-1 rounded hover:bg-gray-100 dark:hover:bg-gray-700">
+            <button onClick={clear} className="p-1 rounded hover:bg-gray-100 dark:hover:bg-gray-700">
               <svg
                 className="w-4 h-4 text-gray-600 dark:text-gray-300"
                 viewBox="0 0 24 24"
@@ -256,27 +262,6 @@ export default function SearchBar({ data, onSelectPath }: Props) {
           ) : null}
         </div>
       </div>
-
-      {/* Small preview panel (optional) */}
-      {previewItems.length > 0 && (
-        <div className="mt-2 rounded bg-white dark:bg-gray-800 border p-2 text-sm shadow-sm">
-          {previewItems.map((m, i) => (
-            <div
-              key={m.path}
-              onClick={() => onSelectPath?.(m.path)}
-              className="py-1 hover:bg-gray-100 dark:hover:bg-gray-700 rounded cursor-pointer"
-            >
-              <div className="font-mono text-xs text-gray-500">{m.path}</div>
-              <div className="flex gap-2 items-center">
-                <div className="text-blue-500 font-mono">{m.key ? `"${m.key}"` : "-"}</div>
-                <div className="text-gray-500">:</div>
-                <div className="font-mono text-sm">{m.valuePreview}</div>
-                <div className="ml-auto text-xs px-2 py-0.5 rounded bg-gray-100 dark:bg-gray-700">{m.type}</div>
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
     </div>
   );
 }

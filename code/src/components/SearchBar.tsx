@@ -227,7 +227,7 @@ export default function SearchBar({ data, onSelectPath }: Props) {
           </div>
 
           {/* Match Count */}
-          <span className="px-1 text-gray-500">
+          <span className="px-1  text-gray-600 dark:text-gray-300">
             {matchCount} match{matchCount !== 1 && "es"}
           </span>
         </div>

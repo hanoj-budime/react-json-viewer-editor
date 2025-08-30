@@ -8,6 +8,10 @@ body,
   height: 100%;
 }
 
+html {
+  transition: background-color 0.3s, color 0.3s;
+}
+
 .code-font {
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono", "Segoe UI Mono", monospace;
 }

@@ -13,6 +13,8 @@
     "deploy": "npm run build && gh-pages -d dist"
   },
   "dependencies": {
+    "@headlessui/react": "^2.2.7",
+    "@heroicons/react": "^2.2.0",
     "@tanstack/react-query": "^4.30.0",
     "clsx": "^1.2.1",
     "react": "^18.2.0",

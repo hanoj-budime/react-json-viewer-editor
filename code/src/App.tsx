@@ -50,8 +50,13 @@ export default function App() {
       <header className="sticky top-0 z-50 bg-white/90 dark:bg-gray-900/90 backdrop-blur-md border-b border-gray-200 dark:border-gray-800">
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3 px-4 sm:px-6 py-2">
           {/* Left: Brand */}
-          <h1 className="text-lg sm:text-xl font-semibold tracking-tight">JSON Viewer</h1>
-
+          <div className="flex items-center">
+            <img
+              src={`${(import.meta as any).env.BASE_URL}icon.png`}
+              alt="JSON Viewer Logo"
+              className="h-7 w-7 sm:h-8 sm:w-9 md:h-9 md:w-14 lg:h-10 lg:w-14 object-contain"
+            />
+          </div>
           {/* Center: Search */}
           <div className="w-full sm:flex-1">
             <SearchBar data={data} onSelectPath={handleSelectPath} />

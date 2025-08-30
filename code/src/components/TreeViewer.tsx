@@ -14,7 +14,7 @@ export default function TreeViewer({ data, error, highlightPath = null }: Props)
 
   return (
     <div className="card p-2">
-      <div className="mb-2 text-sm text-gray-600">Root</div>
+      <div className="mb-2 text-sm text-gray-800 dark:text-gray-200">Root</div>
       <div className="overflow-auto max-h-[70vh]">
         <TreeNode keyName="root" value={data} path="$" depth={0} selectedPath={highlightPath} />
       </div>

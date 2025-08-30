@@ -99,7 +99,7 @@ export default function App() {
           </div>
 
           {/* Tagline */}
-          <p className="hidden md:block italic text-gray-500 dark:text-gray-400">Developer-friendly JSON tool</p>
+          <p className="hidden md:block italic text-gray-800 dark:text-gray-200">Developer-friendly JSON tool</p>
 
           {/* Links */}
           <div className="flex gap-2">
@@ -107,7 +107,7 @@ export default function App() {
               href="https://github.com/hanoj-budime"
               target="_blank"
               rel="noopener noreferrer"
-              className="px-3 py-1 rounded-md border border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 transition shadow-sm"
+              className="px-3 py-1 rounded-md text-gray-800 dark:text-gray-200 border border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 transition shadow-sm"
             >
               GitHub
             </a>
@@ -115,7 +115,7 @@ export default function App() {
               href="https://www.linkedin.com/in/hanoj-budime"
               target="_blank"
               rel="noopener noreferrer"
-              className="px-3 py-1 rounded-md border border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 transition shadow-sm"
+              className="px-3 py-1 rounded-md text-gray-800 dark:text-gray-200 border border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 transition shadow-sm"
             >
               LinkedIn
             </a>

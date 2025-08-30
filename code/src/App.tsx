@@ -50,7 +50,7 @@ export default function App() {
       {/* Sticky header */}
       <header className="sticky top-0 z-40 bg-white/60 dark:bg-gray-900/60 backdrop-blur-sm border-b border-gray-200 dark:border-gray-800">
         <div className="container mx-auto px-4 py-3 flex items-center gap-4">
-          <h1 className="text-lg md:text-2xl font-semibold tracking-tight flex-shrink-0">Modern JSON Viewer</h1>
+          <h1 className="text-lg md:text-2xl font-semibold tracking-tight flex-shrink-0">JSON Viewer</h1>
 
           <div className="flex-1">
             {/* single-line modern SearchBar */}
@@ -88,26 +88,44 @@ export default function App() {
       </main>
 
       {/* Fixed footer at bottom */}
-      <footer className="fixed bottom-0 left-0 right-0 z-50 border-t border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900">
-        <div className="container mx-auto px-4 py-4 flex flex-col md:flex-row items-center justify-between gap-3">
-          <div className="flex items-center gap-3">
-            <div className="h-10 w-10 rounded-full bg-gradient-to-br from-indigo-500 to-purple-500 flex items-center justify-center text-white font-bold">
+      {/* Fixed professional footer */}
+      <footer className="fixed bottom-0 left-0 right-0 z-50 border-t border-gray-200 dark:border-gray-800 bg-white/95 dark:bg-gray-900/95 backdrop-blur-md">
+        <div className="container mx-auto px-6 py-6 grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
+          {/* About Me */}
+          <div className="flex items-center gap-4">
+            <div className="h-12 w-12 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white font-bold shadow-md">
               HB
             </div>
             <div>
-              <div className="text-sm font-semibold">Hanoj Budime</div>
-              <div className="text-xs text-gray-600 dark:text-gray-400">Frontend Engineer — JSON tools & utilities</div>
+              <div className="text-base font-semibold tracking-tight">Hanoj Budime</div>
+              <p className="text-sm text-gray-600 dark:text-gray-400 leading-snug">
+                Software Engineer · Open-Source Enthusiast
+              </p>
             </div>
           </div>
 
-          <div className="text-sm">
+          {/* Center message (optional tagline) */}
+          <div className="hidden md:flex justify-center">
+            <p className="text-sm text-gray-500 dark:text-gray-400 italic">Developer-friendly JSON tools</p>
+          </div>
+
+          {/* Links */}
+          <div className="flex justify-center md:justify-end gap-3">
             <a
               href="https://github.com/hanoj-budime"
               target="_blank"
               rel="noopener noreferrer"
-              className="px-3 py-2 rounded-lg border bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 transition"
+              className="px-4 py-2 text-sm rounded-lg border border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 transition shadow-sm"
             >
-              View on GitHub
+              GitHub
+            </a>
+            <a
+              href="https://www.linkedin.com/in/hanoj-budime" // update if needed
+              target="_blank"
+              rel="noopener noreferrer"
+              className="px-4 py-2 text-sm rounded-lg border border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 transition shadow-sm"
+            >
+              LinkedIn
             </a>
           </div>
         </div>

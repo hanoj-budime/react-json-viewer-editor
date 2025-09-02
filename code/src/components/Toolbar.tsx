@@ -1,8 +1,4 @@
-import {
-  CodeBracketIcon,
-  Bars3BottomLeftIcon,
-  ArrowDownTrayIcon,
-} from "@heroicons/react/24/solid";
+import { CodeBracketIcon, Bars3BottomLeftIcon, ArrowDownTrayIcon } from "@heroicons/react/24/solid";
 import { pretty, minify, convertToValidJSON } from "../utils/jsonUtils";
 
 export default function Toolbar({ raw, setRaw, setData, setError }: any) {
@@ -36,8 +32,9 @@ export default function Toolbar({ raw, setRaw, setData, setError }: any) {
     const blob = new Blob([raw], { type: "application/json" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
+    const timestamp = new Date().getTime(); // unique filename
     a.href = url;
-    a.download = "data.json";
+    a.download = `data-${timestamp}.json`;
     document.body.appendChild(a);
     a.click();
     a.remove();

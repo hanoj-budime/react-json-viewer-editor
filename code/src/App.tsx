@@ -3,6 +3,10 @@ import Editor from "./components/Editor";
 import TreeViewer from "./components/TreeViewer";
 import Toolbar from "./components/Toolbar";
 import SearchBar from "./components/SearchBar";
+import { BugAntIcon } from "@heroicons/react/24/outline"; // GitHub Issues icon
+import { FaLinkedin, FaGithub } from "react-icons/fa"; // For social icons
+// import { HiOutlineCopyright } from "react-icons/hi"; // Copyright
+import { CodeBracketIcon } from "@heroicons/react/24/outline"; // all heroicons
 
 export default function App() {
   const getInitialTheme = (): "light" | "dark" => {
@@ -95,34 +99,47 @@ export default function App() {
       {/* Sticky Bottom Footer */}
       <footer className="sticky bottom-0 z-50 border-t border-gray-200 dark:border-gray-800 bg-white/90 dark:bg-gray-900/90 backdrop-blur-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex flex-col md:flex-row items-center justify-between gap-3 text-xs sm:text-sm text-gray-600 dark:text-gray-400">
-          {/* Brand */}
-          <div className="flex items-center gap-2">
-            <div className="h-7 w-7 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white text-xs font-bold shadow-sm">
-              HB
-            </div>
-            <span className="font-medium text-gray-800 dark:text-gray-200">Hanoj Budime</span>
+          {/* Left: Developer Info */}
+          <div className="flex items-center gap-1 text-gray-700 dark:text-gray-300">
+            <CodeBracketIcon className="h-4 w-4" />
+            <span>
+              Developed by <span className="font-medium text-gray-900 dark:text-gray-100">Hanoj Budime</span> · 2025-{new Date().getFullYear()}
+            </span>
           </div>
 
-          {/* Tagline */}
-          <p className="hidden md:block italic text-gray-800 dark:text-gray-200">Developer-friendly JSON tool</p>
-
-          {/* Links */}
-          <div className="flex gap-2">
+          {/* Right: Action Icons */}
+          <div className="flex items-center gap-3">
+            {/* GitHub Issues */}
             <a
-              href="https://github.com/hanoj-budime"
+              href="https://github.com/hanoj-budime/react-json-viewer-editor/issues"
               target="_blank"
               rel="noopener noreferrer"
-              className="px-3 py-1 rounded-md text-gray-800 dark:text-gray-200 border border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 transition shadow-sm"
+              className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition"
+              title="Report Issue on GitHub"
             >
-              GitHub
+              <BugAntIcon className="h-5 w-5 text-gray-700 dark:text-gray-300" />
             </a>
+
+            {/* LinkedIn */}
             <a
               href="https://www.linkedin.com/in/hanoj-budime"
               target="_blank"
               rel="noopener noreferrer"
-              className="px-3 py-1 rounded-md text-gray-800 dark:text-gray-200 border border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 transition shadow-sm"
+              className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition"
+              title="Connect on LinkedIn"
             >
-              LinkedIn
+              <FaLinkedin className="h-5 w-5 text-gray-700 dark:text-gray-300" />
+            </a>
+
+            {/* GitHub Profile */}
+            <a
+              href="https://github.com/hanoj-budime"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition"
+              title="View GitHub Profile"
+            >
+              <FaGithub className="h-5 w-5 text-gray-700 dark:text-gray-300" />
             </a>
           </div>
         </div>

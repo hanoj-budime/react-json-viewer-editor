@@ -1,3 +1,8 @@
+import {
+  CodeBracketIcon,
+  Bars3BottomLeftIcon,
+  ArrowDownTrayIcon,
+} from "@heroicons/react/24/solid";
 import { pretty, minify, convertToValidJSON } from "../utils/jsonUtils";
 
 export default function Toolbar({ raw, setRaw, setData, setError }: any) {
@@ -13,6 +18,7 @@ export default function Toolbar({ raw, setRaw, setData, setError }: any) {
       setError(e.message);
     }
   }
+
   function onMinify() {
     try {
       const transform_raw = convertToValidJSON(raw);
@@ -25,6 +31,7 @@ export default function Toolbar({ raw, setRaw, setData, setError }: any) {
       setError(e.message);
     }
   }
+
   function onDownload() {
     const blob = new Blob([raw], { type: "application/json" });
     const url = URL.createObjectURL(blob);
@@ -41,22 +48,25 @@ export default function Toolbar({ raw, setRaw, setData, setError }: any) {
     <div className="sticky top-0 bg-transparent z-10">
       <div className="flex gap-2">
         <button
-          className="p-1.5 rounded hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none"
+          className="p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none"
           onClick={onPretty}
+          title="Pretty Print"
         >
-          Pretty
+          <CodeBracketIcon className="h-5 w-5 text-gray-700 dark:text-gray-300" />
         </button>
         <button
-          className="p-1.5 rounded hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none"
+          className="p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none"
           onClick={onMinify}
+          title="Minify JSON"
         >
-          Minify
+          <Bars3BottomLeftIcon className="h-5 w-5 text-gray-700 dark:text-gray-300" />
         </button>
         <button
-          className="p-1.5 rounded hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none"
+          className="p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none"
           onClick={onDownload}
+          title="Download JSON"
         >
-          Download
+          <ArrowDownTrayIcon className="h-5 w-5 text-gray-700 dark:text-gray-300" />
         </button>
       </div>
     </div>

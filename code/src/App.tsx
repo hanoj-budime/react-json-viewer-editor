@@ -78,17 +78,17 @@ export default function App() {
       </header>
 
       {/* Sticky Toolbar */}
-      <div className="sticky top-[56px] sm:top-[60px] z-40 bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm border-b border-gray-200 dark:border-gray-800">
+      {/* <div className="sticky top-[56px] sm:top-[60px] z-40 bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm border-b border-gray-200 dark:border-gray-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-2">
           <Toolbar raw={raw} setRaw={setRaw} setData={setData} setError={setError} />
         </div>
-      </div>
+      </div> */}
 
       {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 py-6 flex-grow w-full">
+      <main className="max-w-7xl mx-auto px-2 sm:px-4 py-2 flex-grow w-full">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <section className="lg:col-span-1">
-            <Editor raw={raw} setRaw={setRaw} onParse={onParse} onError={onError} />
+            <Editor raw={raw} setRaw={setRaw} setData={setData} onParse={onParse} setError={setError} onError={onError} />
           </section>
           <section className="lg:col-span-2">
             <TreeViewer data={data} error={error} highlightPath={highlightPath} />

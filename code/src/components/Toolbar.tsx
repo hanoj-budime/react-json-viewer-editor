@@ -1,4 +1,4 @@
-import { CodeBracketIcon, Bars3BottomLeftIcon, ArrowDownTrayIcon, DocumentDuplicateIcon } from "@heroicons/react/24/solid";
+import { CodeBracketIcon, Bars3BottomLeftIcon, ArrowDownTrayIcon, SlashIcon } from "@heroicons/react/24/solid";
 import { pretty, minify, normalizeJSON, convertToValidJSON } from "../utils/jsonUtils";
 
 export default function Toolbar({ raw, setRaw, setData, setError }: any) {
@@ -75,7 +75,7 @@ export default function Toolbar({ raw, setRaw, setData, setError }: any) {
           onClick={onStringify}
           title="Stringify JSON"
         >
-          <DocumentDuplicateIcon className="h-5 w-5 text-gray-700 dark:text-gray-300" />
+          <SlashIcon className="h-5 w-5 text-gray-700 dark:text-gray-300" />
         </button>
         <button
           className="p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none"

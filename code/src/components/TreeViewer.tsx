@@ -1,8 +1,8 @@
 // src/components/TreeViewer.tsx
 import React from "react";
-import { ArrowsPointingOutIcon, ArrowsPointingInIcon } from "@heroicons/react/24/solid";
 import { TreeProvider, useTreeContext } from "../context/TreeContext";
 import TreeNode from "./TreeNode";
+import { MdCompress, MdExpand } from "react-icons/md";
 
 const Controls = () => {
   const { triggerExpand, triggerCollapse } = useTreeContext();
@@ -13,14 +13,14 @@ const Controls = () => {
         className="p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none"
         title="Expand All"
       >
-        <ArrowsPointingOutIcon className="h-5 w-5 text-gray-700 dark:text-gray-300" />
+        <MdExpand className="h-5 w-5 text-gray-700 dark:text-gray-300" />
       </button>
       <button
         onClick={triggerCollapse}
         className="p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none"
         title="Collapse All"
       >
-        <ArrowsPointingInIcon className="h-5 w-5 text-gray-700 dark:text-gray-300" />
+        <MdCompress className="h-5 w-5 text-gray-700 dark:text-gray-300" />
       </button>
     </div>
   );

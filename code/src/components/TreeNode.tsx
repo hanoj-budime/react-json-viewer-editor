@@ -1,5 +1,6 @@
 // src/components/TreeNode.tsx
 import React, { useEffect, useRef, useState, memo } from "react";
+import { useTreeContext } from "../context/TreeContext";
 import clsx from "clsx";
 import { ChevronDownIcon, ChevronRightIcon } from "@heroicons/react/24/solid";
 
@@ -18,8 +19,10 @@ const TypeBadge = ({ v }: { v: any }) => {
 
 function renderColoredValue(value: any) {
   if (value === null) return <span className="text-gray-500 italic font-mono">null</span>;
-  if (Array.isArray(value)) return <span className="text-gray-700 dark:text-gray-300 font-mono">Array({value.length})</span>;
-  if (isObject(value)) return <span className="text-gray-700 dark:text-gray-300 font-mono">Object({Object.keys(value).length})</span>;
+  if (Array.isArray(value))
+    return <span className="text-gray-700 dark:text-gray-300 font-mono">Array({value.length})</span>;
+  if (isObject(value))
+    return <span className="text-gray-700 dark:text-gray-300 font-mono">Object({Object.keys(value).length})</span>;
 
   switch (typeof value) {
     case "string":
@@ -33,16 +36,20 @@ function renderColoredValue(value: any) {
   }
 }
 
-export default memo(function TreeNode({
-  keyName,
-  value,
-  path,
-  depth,
-  selectedPath,
-}: any) {
+export default memo(function TreeNode({ keyName, value, path, depth, selectedPath }: any) {
+  const { expandSignal, collapseSignal } = useTreeContext();
   const [open, setOpen] = useState(depth < 1);
   const leaf = value === null || typeof value !== "object";
   const nodeRef = useRef<HTMLDivElement | null>(null);
+
+  // React to global expand/collapse
+  useEffect(() => {
+    if (!leaf) setOpen(true);
+  }, [expandSignal]);
+
+  useEffect(() => {
+    if (!leaf) setOpen(false);
+  }, [collapseSignal]);
 
   useEffect(() => {
     if (!selectedPath) return;
@@ -87,20 +94,13 @@ export default memo(function TreeNode({
         <div className="flex-1 code-font flex items-center gap-2">
           <span className="text-blue-500 font-mono">"{keyName}"</span>
           <span className="text-gray-500 font-mono">:</span>
-          <span className="ml-1 truncate max-w-[60vw]">
-            {renderColoredValue(value)}
-          </span>
+          <span className="ml-1 truncate max-w-[60vw]">{renderColoredValue(value)}</span>
           <TypeBadge v={value} />
         </div>
       </div>
 
       {!leaf && (
-        <div
-          className={clsx(
-            "pl-4 border-l border-gray-300 dark:border-gray-600",
-            !open && "hidden"
-          )}
-        >
+        <div className={clsx("pl-4 border-l border-gray-300 dark:border-gray-600", !open && "hidden")}>
           {Array.isArray(value)
             ? value.map((v: any, i: number) => (
                 <TreeNode

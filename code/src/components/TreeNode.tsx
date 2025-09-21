@@ -51,6 +51,15 @@ function getBracketColor(depth: number) {
   return BRACKET_COLORS[depth % BRACKET_COLORS.length];
 }
 
+function getBorderColor(color: string) {
+  // Remove both "text-" and "dark:text-" prefixes
+  let themeColors = color
+    .replace(/text-|dark:text-/g, "") // strip all variants
+    .split(" ");                      // now ["red-500", "red-400"]
+
+  return `border-${themeColors[0]} dark:border-${themeColors[1]}`;
+}
+
 export default memo(function TreeNode({ keyName, value, path, depth, selectedPath }: any) {
   const { expandSignal, collapseSignal } = useTreeContext();
   const [open, setOpen] = useState(depth < 1);
@@ -84,6 +93,7 @@ export default memo(function TreeNode({ keyName, value, path, depth, selectedPat
   const openBracket = isArray ? "[" : "{";
   const closeBracket = isArray ? "]" : "}";
   const bracketColor = getBracketColor(depth);
+  const borderColor = getBorderColor(bracketColor);
 
   return (
     <div className="pl-2" ref={nodeRef}>
@@ -131,7 +141,7 @@ export default memo(function TreeNode({ keyName, value, path, depth, selectedPat
 
       {/* Child nodes */}
       {!leaf && (
-        <div className={clsx("pl-4 border-l border-gray-300 dark:border-gray-600", !open && "hidden")}>
+        <div className={clsx(`pl-4 border-l ${borderColor}`, !open && "hidden")}>
           {Array.isArray(value)
             ? value.map((v: any, i: number) => (
                 <TreeNode
@@ -156,7 +166,7 @@ export default memo(function TreeNode({ keyName, value, path, depth, selectedPat
 
           {/* Closing bracket */}
           {open && (
-            <div className={`pl-6 font-mono ${bracketColor}`}>
+            <div className={`font-mono ${bracketColor}`}>
               {closeBracket}
             </div>
           )}

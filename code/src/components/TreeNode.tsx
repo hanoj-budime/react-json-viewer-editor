@@ -2,7 +2,7 @@
 import React, { useEffect, useRef, useState, memo } from "react";
 import { useTreeContext } from "../context/TreeContext";
 import clsx from "clsx";
-import { ChevronDownIcon, ChevronRightIcon } from "@heroicons/react/24/solid";
+import { AiOutlinePlusSquare, AiOutlineMinusSquare } from "react-icons/ai";
 
 function isObject(v: any) {
   return v && typeof v === "object" && !Array.isArray(v);
@@ -36,13 +36,22 @@ function renderColoredValue(value: any) {
   }
 }
 
+// pastel color rotation for bracket pairs
+const BRACKET_COLORS = [
+  "text-pink-400",
+  "text-blue-400",
+  "text-green-500",
+  "text-purple-400",
+  "text-orange-400",
+];
+
 export default memo(function TreeNode({ keyName, value, path, depth, selectedPath }: any) {
   const { expandSignal, collapseSignal } = useTreeContext();
   const [open, setOpen] = useState(depth < 1);
   const leaf = value === null || typeof value !== "object";
   const nodeRef = useRef<HTMLDivElement | null>(null);
 
-  // React to global expand/collapse
+  // global expand/collapse signals
   useEffect(() => {
     if (!leaf) setOpen(true);
   }, [expandSignal]);
@@ -51,6 +60,7 @@ export default memo(function TreeNode({ keyName, value, path, depth, selectedPat
     if (!leaf) setOpen(false);
   }, [collapseSignal]);
 
+  // ensure visibility of selected path
   useEffect(() => {
     if (!selectedPath) return;
     if (selectedPath === path) {
@@ -62,6 +72,12 @@ export default memo(function TreeNode({ keyName, value, path, depth, selectedPat
   }, [selectedPath, path]);
 
   const isSelected = selectedPath === path;
+  const isArray = Array.isArray(value);
+  const isObj = isObject(value);
+
+  const openBracket = isArray ? "[" : "{";
+  const closeBracket = isArray ? "]" : "}";
+  const bracketColor = BRACKET_COLORS[depth % BRACKET_COLORS.length];
 
   return (
     <div className="pl-2" ref={nodeRef}>
@@ -71,7 +87,7 @@ export default memo(function TreeNode({ keyName, value, path, depth, selectedPat
           isSelected ? "bg-yellow-100 dark:bg-yellow-700" : ""
         )}
       >
-        {/* Expand/Collapse control or spacer for consistent alignment */}
+        {/* Expand/Collapse control */}
         <div className="w-5 h-5 flex items-center justify-center">
           {!leaf ? (
             <button
@@ -80,25 +96,34 @@ export default memo(function TreeNode({ keyName, value, path, depth, selectedPat
               className="w-5 h-5 flex items-center justify-center"
             >
               {open ? (
-                <ChevronDownIcon className="w-4 h-4 text-gray-600 dark:text-gray-300" />
+                <AiOutlineMinusSquare className="text-gray-700 dark:text-gray-300" />
               ) : (
-                <ChevronRightIcon className="w-4 h-4 text-gray-600 dark:text-gray-300" />
+                <AiOutlinePlusSquare className="text-gray-700 dark:text-gray-300" />
               )}
             </button>
           ) : (
-            // Empty placeholder keeps alignment
             <span className="inline-block w-4 h-4" />
           )}
         </div>
 
+        {/* Key + value or bracket placeholder */}
         <div className="flex-1 code-font flex items-center gap-2">
           <span className="text-blue-500 font-mono">"{keyName}"</span>
           <span className="text-gray-500 font-mono">:</span>
-          <span className="ml-1 truncate max-w-[60vw]">{renderColoredValue(value)}</span>
+
+          {leaf ? (
+            <span className="ml-1 truncate max-w-[60vw]">{renderColoredValue(value)}</span>
+          ) : (
+            <span className={`${bracketColor} font-mono ml-1`}>
+              {open ? openBracket : isArray ? "[]" : "{}"}
+            </span>
+          )}
+
           <TypeBadge v={value} />
         </div>
       </div>
 
+      {/* Child nodes */}
       {!leaf && (
         <div className={clsx("pl-4 border-l border-gray-300 dark:border-gray-600", !open && "hidden")}>
           {Array.isArray(value)
@@ -122,6 +147,13 @@ export default memo(function TreeNode({ keyName, value, path, depth, selectedPat
                   selectedPath={selectedPath}
                 />
               ))}
+
+          {/* Closing bracket */}
+          {open && (
+            <div className={`pl-6 font-mono ${bracketColor}`}>
+              {closeBracket}
+            </div>
+          )}
         </div>
       )}
     </div>

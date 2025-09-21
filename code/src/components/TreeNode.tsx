@@ -36,14 +36,20 @@ function renderColoredValue(value: any) {
   }
 }
 
-// pastel color rotation for bracket pairs
+// High-contrast Bracket Pair Colors
 const BRACKET_COLORS = [
-  "text-pink-400",
-  "text-blue-400",
-  "text-green-500",
-  "text-purple-400",
-  "text-orange-400",
+  "text-red-500 dark:text-red-400",      // Level 1 → Strong warm
+  "text-emerald-500 dark:text-emerald-400", // Level 2 → Vivid green
+  "text-blue-500 dark:text-blue-400",    // Level 3 → Clean cool
+  "text-orange-500 dark:text-orange-400",// Level 4 → Warm accent
+  "text-fuchsia-500 dark:text-fuchsia-400", // Level 5 → Bright magenta
+  "text-cyan-500 dark:text-cyan-400",    // Level 6 → Aqua contrast
+  "text-yellow-500 dark:text-yellow-400" // Level 7 → Bright highlight
 ];
+
+function getBracketColor(depth: number) {
+  return BRACKET_COLORS[depth % BRACKET_COLORS.length];
+}
 
 export default memo(function TreeNode({ keyName, value, path, depth, selectedPath }: any) {
   const { expandSignal, collapseSignal } = useTreeContext();
@@ -77,7 +83,7 @@ export default memo(function TreeNode({ keyName, value, path, depth, selectedPat
 
   const openBracket = isArray ? "[" : "{";
   const closeBracket = isArray ? "]" : "}";
-  const bracketColor = BRACKET_COLORS[depth % BRACKET_COLORS.length];
+  const bracketColor = getBracketColor(depth);
 
   return (
     <div className="pl-2" ref={nodeRef}>
